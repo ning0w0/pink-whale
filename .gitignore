@@ -1,0 +1,10 @@
+# 依赖
+node_modules/
+
+# 日志
+*.log
+npm-debug.log*
+
+# 系统
+.DS_Store
+Thumbs.db
