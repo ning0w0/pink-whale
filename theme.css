@@ -1,0 +1,156 @@
+/* ============================================================
+   Pink Whale 🐳 全页面风格化（基于 DSH 真实结构诊断）
+   注入到 DSH 页面的 <style id="__whale_theme__"> 中。
+   覆盖：整体框架、侧边栏、聊天区、欢迎页、按钮、输入框、滚动条。
+   ============================================================ */
+
+/* ---- 1. 全局基调：粉色渐变底 + 深棕粉文字 ---- */
+html,
+body {
+  background: linear-gradient(160deg, #FFE9F0, #FFD1DC) !important;
+  color: #5A3A44 !important;
+}
+
+/* ---- 2. 框架容器：去掉白色底，露出粉色（或半透明白粉） ---- */
+[class*="_0PynzW_frame"],
+[class*="_0PynzW_sidebarCol"],
+[class*="_0PynzW_centerCol"] {
+  background: transparent !important;
+}
+
+/* 侧边栏：半透明白粉，保留与聊天区的层次 */
+[class*="_7_8YhW_root"] {
+  background: rgba(255, 255, 255, .6) !important;
+}
+
+/* 聊天区 / 欢迎页：透明，露出粉色渐变 */
+[class*="GZcQOa_root"],
+[class*="Vu7ygq_root"] {
+  background: transparent !important;
+}
+
+/* ---- 3. 侧边栏文字与品牌 ---- */
+[class*="_7_8YhW_"] {
+  color: #5A3A44 !important;
+}
+[class*="_7_8YhW_brand"] {
+  color: #E86A8A !important;
+  font-weight: 700 !important;
+}
+
+/* ---- 4. 按钮：粉色圆角 ---- */
+button {
+  border-radius: 10px !important;
+}
+[class*="_9JUIXa_iconButton"],
+[class*="_7_8YhW_iconButton"] {
+  background: #FFB6C8 !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  border: none !important;
+}
+[class*="_7_8YhW_newSession"] {
+  background: #FFB6C8 !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* 覆盖 hover / 焦点 / 激活状态（消除"新会话"文字下方的小疙瘩） */
+[class*="_7_8YhW_newSession"]:hover,
+[class*="_7_8YhW_newSession"]:focus,
+[class*="_7_8YhW_newSession"]:focus-visible,
+[class*="_7_8YhW_newSession"]:active {
+  background: #FFB6C8 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+/* 清除按钮上可能存在的指示点/伪元素（"新会话"文字下方的小疙瘩） */
+[class*="_7_8YhW_newSession"]::before,
+[class*="_7_8YhW_newSession"]::after,
+[class*="_7_8YhW_newSessionLabel"]::before,
+[class*="_7_8YhW_newSessionLabel"]::after,
+[class*="_7_8YhW_newSession"]:hover::after,
+[class*="_7_8YhW_newSession"]:hover::before {
+  content: none !important;
+}
+
+/* ---- 5. 输入框 / 搜索框 ---- */
+[class*="_9JUIXa_searchInput"],
+input[type='text'],
+input[type='search'],
+textarea {
+  background: #ffffff !important;
+  border: 2px solid #FFB6C8 !important;
+  border-radius: 999px !important;
+  color: #5A3A44 !important;
+  outline: none !important;
+}
+[class*="_9JUIXa_searchInput"]:focus,
+input:focus,
+textarea:focus {
+  border-color: #E86A8A !important;
+  box-shadow: 0 0 0 3px rgba(232, 106, 138, .18) !important;
+}
+
+/* ---- 6. 链接与选中 ---- */
+a {
+  color: #E86A8A !important;
+}
+a:hover {
+  color: #D44E74 !important;
+}
+::selection {
+  background: #FFB6C8;
+  color: #ffffff;
+}
+
+/* ---- 7. 滚动条（粉色圆角） ---- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFB6C8;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E86A8A;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---- 8. 欢迎页大标题 ---- */
+[class*="Vu7ygq_headlineText"] {
+  color: #E86A8A !important;
+}
+
+/* ---- 9. 发送 / 停止生成按钮：蓝色 → 标题框同款粉色渐变 ---- */
+[class*="owvEQG_primary"] {
+  background: linear-gradient(135deg, #FFB6C8, #FF8FA3) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(232, 106, 138, .35) !important;
+}
+[class*="owvEQG_primary"]:hover {
+  background: linear-gradient(135deg, #FF8FA3, #E86A8A) !important;
+}
+
+/* ---- 10. 输入栏卡片：半透明白粉 75% ---- */
+[class*="owvEQG_card"] {
+  background: rgba(255, 255, 255, .75) !important;
+  background-image: none !important;
+}
+
+/* ---- 11. 输入区底座白色渐变：直接去掉 ---- */
+[class*="GZcQOa_composerSeat"] {
+  background-image: none !important;
+}
+
+/* ---- 12. 输入框 placeholder 提示文字隐藏（如"给智能体发消息"） ---- */
+[class*="owvEQG_input"]::placeholder {
+  color: transparent !important;
+}
