@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>🎀</title>
+<style>
+  /* ============ Pink Whale 主题变量 ============ */
+  :root {
+    --whale-bg-1: #FFE9F0;
+    --whale-bg-2: #FFD1DC;
+    --whale-pink: #FFB6C8;
+    --whale-deep: #E86A8A;
+    --whale-coral: #FF8FA3;
+    --whale-white: #FFFFFF;
+    --whale-text: #5A3A44;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* 圆角外壳 */
+  html { border-radius: 18px; overflow: hidden; background: #FFD9E5; }
+  body {
+    font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+    background: #FFD9E5;
+    color: var(--whale-text);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(232,106,138,.5), 0 14px 44px rgba(232,106,138,.35);
+  }
+  body.maximized { border-radius: 0; box-shadow: none; }
+
+  /* ============ 自绘标题栏 ============ */
+  .titlebar {
+    position: fixed; top: 0; left: 0; right: 0; height: 46px;
+    display: flex; align-items: center;
+    background: linear-gradient(90deg, #FFB6C8, #FF8FA3);
+    -webkit-app-region: drag;
+    user-select: none;
+    z-index: 999;
+    box-shadow: 0 2px 10px rgba(232,106,138,.25);
+  }
+  body.maximized .titlebar { border-radius: 0; }
+  .tb-spacer { flex: 1; height: 100%; }
+  .tb-btns { display: flex; height: 100%; -webkit-app-region: no-drag; }
+  .tb-btn {
+    width: 48px; border: none; background: transparent;
+    color: #fff; font-size: 14px; cursor: pointer;
+    transition: background .15s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tb-btn svg { display: block; }
+  .tb-btn:hover { background: rgba(255,255,255,.28); }
+  .tb-close:hover { background: #E5484D; }
+
+  /* ============ 内容区（标题栏下方） ============ */
+  .content {
+    position: fixed; top: 46px; left: 0; right: 0; bottom: 0;
+  }
+
+  /* iframe 嵌 DSH */
+  #dsh {
+    width: 100%; height: 100%; border: none;
+    display: none; background: #fff;
+  }
+
+  /* 未运行引导页 */
+  .guide {
+    display: none; align-items: center; justify-content: center;
+    height: 100%;
+    background: linear-gradient(160deg, var(--whale-bg-1), var(--whale-bg-2));
+  }
+  .guide.show { display: flex; }
+  .guide-card {
+    background: rgba(255,255,255,.9);
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(232,106,138,.18);
+    padding: 34px 44px;
+    text-align: center;
+    max-width: 440px;
+  }
+  .guide-card .emoji { font-size: 52px; }
+  .guide-card h2 { color: var(--whale-deep); margin: 10px 0 8px; font-size: 20px; }
+  .guide-card p { font-size: 13px; line-height: 1.7; color: var(--whale-text); }
+  .guide-card code {
+    display: inline-block; background: #FFE9F0; color: var(--whale-deep);
+    padding: 2px 10px; border-radius: 8px; font-size: 13px; margin: 2px 0;
+  }
+  .btn-primary {
+    margin-top: 18px; border: none; cursor: pointer; font-family: inherit;
+    font-size: 14px; font-weight: 600; padding: 10px 30px;
+    border-radius: 999px; letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--whale-pink), var(--whale-deep));
+    color: #fff; box-shadow: 0 4px 14px rgba(232,106,138,.4);
+    transition: all .18s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,106,138,.5); }
+</style>
+</head>
+<body>
+
+  <!-- 自绘标题栏 -->
+  <div class="titlebar">
+    <div class="tb-spacer"></div>
+    <div class="tb-btns">
+      <button class="tb-btn" id="btnReload" title="刷新">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+          <polyline points="21 3 21 9 15 9"/>
+        </svg>
+      </button>
+      <button class="tb-btn" id="btnMin" title="最小化">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+      <button class="tb-btn" id="btnMax" title="最大化">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <rect x="4.5" y="4.5" width="15" height="15" rx="1.5"/>
+        </svg>
+      </button>
+      <button class="tb-btn tb-close" id="btnClose" title="关闭">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 内容区：引导页 + DSH iframe -->
+  <div class="content">
+    <div class="guide show" id="guide">
+      <div class="guide-card">
+        <div class="emoji">😿</div>
+        <h2>DeepSeek Harness 还没起床</h2>
+        <p>请先在终端运行：<br><code>pnpm dsh web</code></p>
+        <p>（或等待登录自启动脚本 <code>start-dsh.ps1</code>）</p>
+        <button class="btn-primary" id="btnRetry">🔄 重试</button>
+      </div>
+    </div>
+    <iframe id="dsh" src="about:blank" allow="clipboard-read; clipboard-write"></iframe>
+  </div>
+
+  <script>
+    const whale = window.whaleWindow;
+    const DSH_URL = 'http://127.0.0.1:3080';
+    const guide = document.getElementById('guide');
+    const frame = document.getElementById('dsh');
+
+    // 检测 DSH 状态并切换引导页 / iframe
+    async function checkDsh() {
+      let ok = false;
+      try { ok = await whale.checkDsh(); } catch (e) { ok = false; }
+      if (ok) {
+        if (frame.getAttribute('src') !== DSH_URL) frame.src = DSH_URL;
+        frame.style.display = 'block';
+        guide.classList.remove('show');
+      } else {
+        frame.style.display = 'none';
+        guide.classList.add('show');
+      }
+    }
+
+    // 标题栏按钮
+    if (whale) {
+      document.getElementById('btnMin').addEventListener('click', () => whale.minimize());
+      document.getElementById('btnMax').addEventListener('click', () => whale.maximize());
+      document.getElementById('btnClose').addEventListener('click', () => whale.close());
+      whale.onMaximized(v => document.body.classList.toggle('maximized', v));
+    }
+    document.getElementById('btnRetry').addEventListener('click', checkDsh);
+    document.getElementById('btnReload').addEventListener('click', () => {
+      // 先触发诊断（抓当前 DOM），再刷新 iframe
+      if (whale && whale.runDiag) whale.runDiag();
+      if (frame.getAttribute('src') === DSH_URL) {
+        try { frame.contentWindow.location.reload(); }
+        catch (e) { frame.src = DSH_URL; }
+      } else {
+        checkDsh();
+      }
+    });
+
+    // 启动时检测
+    checkDsh();
+  </script>
+</body>
+</html>
